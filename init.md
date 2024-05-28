@@ -125,11 +125,7 @@ kubeadm reset
 ```
 kubeadm join 192.168.239.128:6443 --token cfmqdx.wg8u6c54o2pj3qlp --discovery-token-ca-cert-hash sha256:61fd6aca265465e44dbf0a10165a5d206777412b4d6d3eeed91de0cb756d226e
 # 清空初始化后的记录或者token过期重新获取
-kubeadm token create
-# 没有过期
-kubeadm token list
-# 获取--discovery-token-ca-cert-hash的值
-openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2> /dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+kubeadm token create --print-join-command
 ```
 
 安装CNI
