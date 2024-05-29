@@ -148,11 +148,14 @@ echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bahs_profile
 source ~/.bash_profile
 ```
 
-kubectl 短命令，在~/.bashrc加入，source ~/.bashrc
+kubectl 短命令
 
 ```bash
+# 在~/.bashrc加入，source ~/.bashrc生效
 alias k='kubectl'
 complete -o default -F __start_kubectl k
 source <(kubectl completion bash)
+# 代码补全
+yum -y install bash-completion
 ```
 
