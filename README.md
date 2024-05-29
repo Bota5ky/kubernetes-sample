@@ -128,6 +128,16 @@ kubeadm join 192.168.239.128:6443 --token cfmqdx.wg8u6c54o2pj3qlp --discovery-to
 kubeadm token create --print-join-command
 ```
 
+在任意节点使用kubectl
+
+```bash
+# 将 master 节点中 /etc/kubernetes/admin.conf 拷贝到需要运行的服务器的 /etc/kubernetes 目录中
+scp /etc/kubernetes/admin.conf root@k8s-node1:/etc/kubernetes
+# 在对应服务器上配置环境变量
+echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
+source ~/.bash_profile
+```
+
 安装CNI
 
 ```bash
@@ -136,16 +146,6 @@ curl https://calico-v3-25.netlify.app/archive/v3.25/manifests/calico.yaml -O -k
 # 删除镜像 docker.io/ 前缀，避免下载过慢导致失败
 sed -i 's#docker.io/##g' calico.yaml
 kubectl apply -f calico.yaml
-```
-
-在任意节点使用kubectl
-
-```bash
-# 将 master 节点中 /etc/kubernetes/admin.conf 拷贝到需要运行的服务器的 /etc/kubernetes 目录中
-scp /etc/kubernetes/admin.conf root@k8s-node1:/etc/kubernetes
-# 在对应服务器上配置环境变量
-echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bahs_profile
-source ~/.bash_profile
 ```
 
 kubectl 短命令
@@ -158,4 +158,3 @@ source <(kubectl completion bash)
 # 代码补全
 yum -y install bash-completion
 ```
-
