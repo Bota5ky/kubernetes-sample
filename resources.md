@@ -91,8 +91,6 @@ spec:
   selector:
     matchLabels:
       app: logging # 对应的 DaemonSet pod 的标签
-  nodeSelector:
-    type: microservice
   template:
     metadata:
       labels:
@@ -100,6 +98,8 @@ spec:
         id: fluentd
       name: fluentd
     spec:
+      nodeSelector:
+        type: microservice
       containers:
       - name: fluentd-es
         image: agilestacks/fluentd-elasticsearch:v1.3.0
