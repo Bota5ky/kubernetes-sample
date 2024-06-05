@@ -170,3 +170,15 @@ kubectl get endpoints
 IP 绑定在 pause 容器上
 
 ![service](service.png)
+
+```yaml
+spec:
+  ports:
+  - port: 80 # service 自己的端口，在使用内网 ip 访问时使用
+    targetPort: 80 # 目标 pod 的端口
+    name: web # 为端口起个名字
+    type: NodePort # 随机启动一个端口(30000-32767)，映射到 ports 中的端口，该端口是直接绑定在 node 上的，且集群中的每一个 node 都会绑定这个端口
+# 也可以用于将服务暴露给外部访问，但是这种方式实际生产环境不推荐，效率较低，而且 Service 是四层负载，无法处理应用层如 http 协议的header
+```
+
+默认协议为 TCP
