@@ -169,7 +169,7 @@ kubectl get endpoints
 
 IP 绑定在 pause 容器上
 
-![service](service.png)
+<img src="service.png" width="70%" />
 
 ```yaml
 spec:
