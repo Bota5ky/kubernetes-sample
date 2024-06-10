@@ -169,7 +169,7 @@ kubectl get endpoints
 
 IP 绑定在 pause 容器上
 
-<img src="service.png" width="70%" />
+<img src="service.png" width="80%" />
 
 ```yaml
 spec:
@@ -182,3 +182,55 @@ spec:
 ```
 
 默认协议为 TCP
+
+代理 k8s 外部服务：
+
+- 编写 service 配置文件时，不指定 selector 属性
+- 自己创建 endpoint
+
+```yaml
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    app: external-svc # 与service一致
+    name: external-svc # 与service一致
+    namespace: default # 与service一致
+subsets:
+- addresses:
+  - ip: 120.78.159.117 # 目标ip地址
+  ports:
+  - name: http # 端口名与service一致
+    port: 80
+    protocol: TCO
+```
+
+反向代理外部域名：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: external-domain
+    name: external-domain
+spec:
+  type: ExternalName
+  externalName: www.wolfcode.cn
+```
+
+常用类型：
+
+- ClusterIP 默认类型，可缺省
+
+- ExternalName 返回定义的 CNAME 别名，可以配置为域名
+
+- NodePort 会在所有安装了 kube-proxy 的节点都绑定一个端口，此端口可以代理至对应的 Pod，集群外部可以使用任意节点 ip +NodePort 的端口号访问到集群中对应 Pod 中的服务。
+
+  当类型设置为 NodePort 后，可以在 ports 配置中增加 nodePort 配置指定端口，需要在下方的端口范围内，如果不指走会随机指定端口
+
+  端口范围：30000~32767
+  端口范围配置在 /usr/lib/systemd/system/kube-apiserver.service 文件中
+
+- LoadBalancer 使用云服务商（阿里云、腾讯云等）提供的负载均衡器服务
+
